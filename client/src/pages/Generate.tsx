@@ -5,6 +5,7 @@ import SoftBackdrop from "../components/Softbackdrop";
 import AspectRatioSelector from "../components/Aspectratioselector";
 import StyleSelector from "../components/StlyeSelector";
 import ColorSchemeSelector from "../components/colorSchemeSelector";
+import PreviewPanle from "../components/previewPanel";
 
 
 
@@ -92,6 +93,15 @@ const Generate = () => {
                                         </button>
                                     )
                                 }
+
+                                {/* Right panel */}
+
+                                <div>
+                                    <div className="p-6 rounded-2xl bg-white/8 border border-white/10 shadow-xl">
+                                        <h2>preview </h2>
+                                        <PreviewPanle thumbnail={thumbnail} isloading={loading} aspectRation={aspectRatio} />
+                                    </div>
+                                </div>
 
                             </div>
 

@@ -3,7 +3,7 @@ import type { AspectRatio, IThumbnail } from "../assets/assets"
 import { DownloadIcon, ImageIcon, Loader2Icon } from "lucide-react";
 
 
-const PreviewPanle = ({ thumbnail, isloading, aspectRatio }: { thumbnail: IThumbnail, isloading: boolean; aspectRation: AspectRatio }) => {
+const PreviewPanle = ({ thumbnail, isloading, aspectRatio }: { thumbnail: IThumbnail | null, isloading: boolean; aspectRation: AspectRatio }) => {
     const aspectClasses = {
         '16:9': 'aspect-video',
         '1:1': 'aspect-square',
