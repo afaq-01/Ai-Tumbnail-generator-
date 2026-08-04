@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { colorSchemes, type AspectRatio, type IThumbnail, type ThumbnailStyle } from "../assets/assets";
+import { colorSchemes, dummyThumbnails, type AspectRatio, type IThumbnail, type ThumbnailStyle } from "../assets/assets";
 import SoftBackdrop from "../components/Softbackdrop";
 import AspectRatioSelector from "../components/Aspectratioselector";
 import StyleSelector from "../components/StlyeSelector";
@@ -22,6 +22,33 @@ const Generate = () => {
     const [style, setStyle] = useState<ThumbnailStyle>('Bold & Graphic')
 
     const [styleDropdownOpen, setStyleDropdownOpen] = useState(false)
+
+    const handle_generate = async () => {
+
+    }
+
+    const fetchThumbnail = async () => {
+        if (id) {
+            const found: any = dummyThumbnails.find((t) => t._id === id);
+            if (!found) {
+                setLoading(false);
+                return;
+            }
+            setThumbnail(found)
+            setAdditionalDetail(found.user_prompt || '')
+            setTitle(found.title)
+            setAspectRatio(found.aspect_ratio || '16:9')
+            setColorScheme(found.color_scheme || colorSchemes[0].id)
+            setStyle(found.style)
+            setLoading(false)
+        }
+    }
+
+    useEffect(() => {
+        if (id) {
+            fetchThumbnail();
+        }
+    }, [id])
 
 
 
@@ -86,6 +113,7 @@ const Generate = () => {
                                 {
                                     !id && (
                                         <button
+                                            onClick={handle_generate}
                                             disabled={loading}
                                             className="text-[15px] w-full py-3.5 rounded-xl font-medium bg-gradient-to-b from-pink-500 to-pink-600 hover:from-pink-700 disabled:cursor-not-allowed transition-colors"
                                         >
@@ -93,18 +121,15 @@ const Generate = () => {
                                         </button>
                                     )
                                 }
-
-                                {/* Right panel */}
-
-                                <div>
-                                    <div className="p-6 rounded-2xl bg-white/8 border border-white/10 shadow-xl">
-                                        <h2>preview </h2>
-                                        <PreviewPanle thumbnail={thumbnail} isloading={loading} aspectRation={aspectRatio} />
-                                    </div>
-                                </div>
-
                             </div>
+                        </div>
 
+                        {/* Right panel */}
+                        <div>
+                            <div className="p-6 rounded-2xl bg-white/8 border border-white/10 shadow-xl">
+                                <h2>preview </h2>
+                                <PreviewPanle thumbnail={thumbnail} isloading={loading} aspectRatio={aspectRatio} />
+                            </div>
                         </div>
 
                     </div>
