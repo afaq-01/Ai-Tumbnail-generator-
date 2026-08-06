@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import SoftBackdrop from "../components/Softbackdrop";
 import type { dummyThumbnails, IThumbnail } from "../assets/assets";
-
-
+import { div } from "motion/react-client";
 
 const MyGeneration = () => {
     const [thumbnails, setThumbnails] = useState<IThumbnail>([])
@@ -10,7 +9,7 @@ const MyGeneration = () => {
 
     const fetchthumbnails = async () => {
         setThumbnails(dummyThumbnails as unknown as IThumbnail[])
-       // setLoading(false)
+        // setLoading(false)
     }
 
     const handleDownload = () => {
@@ -40,6 +39,16 @@ const MyGeneration = () => {
 
                             </div>
                         ))}
+                    </div>
+                )}
+
+                {/*EMPTY STATE */}
+
+                {!Loading && thumbnails.lenght === 0 && (
+                    <div className="text-center py-24">
+                        <h3 className="text-lg font-semiBold text-zinc-200">No thumbnails yet</h3>
+                        <p className="text-">Generate your first thumbnail to see it here </p>
+
                     </div>
                 )}
 
