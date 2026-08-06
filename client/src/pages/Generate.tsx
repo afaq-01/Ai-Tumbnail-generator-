@@ -8,7 +8,6 @@ import ColorSchemeSelector from "../components/colorSchemeSelector";
 import PreviewPanle from "../components/previewPanel";
 
 
-
 const Generate = () => {
     const { id } = useParams();
     const [title, setTitle] = useState('');
@@ -49,9 +48,6 @@ const Generate = () => {
             fetchThumbnail();
         }
     }, [id])
-
-
-
 
     return (
         <>
