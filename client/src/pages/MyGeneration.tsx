@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import SoftBackdrop from "../components/Softbackdrop";
 import { dummyThumbnails, type IThumbnail } from "../assets/assets";
 import { ArrowUpRightIcon, DownloadIcon, TrashIcon } from "lucide-react";
@@ -26,6 +26,13 @@ const MyGeneration = () => {
         if (thumb.image_url) {
             window.open(thumb.image_url, "_blank");
         }
+    };
+
+    const handleDelete = (id: string) => {
+        const confirmDelete = window.confirm("Delete this thumbnail? This can't be undone.");
+        if (!confirmDelete) return;
+
+        setThumbnails((prev) => prev.filter((thumb) => thumb._id !== id));
     };
 
     useEffect(() => {
@@ -106,12 +113,20 @@ const MyGeneration = () => {
                                         onClick={(e) => e.stopPropagation()}
                                         className="absolute bottom-2 right-2 max-sm:flex sm:hidden group-hover:flex gap-1.5"
                                     >
-                                        <TrashIcon className="size-6 bg-black/50 p-1 rounded hover:bg-pink-600 transition-all" />
+                                        <TrashIcon
+                                            className="size-6 bg-black/50 p-1 rounded hover:bg-pink-600 transition-all"
+                                            onClick={() => handleDelete(thumb._id)}
+                                        />
                                         <DownloadIcon
                                             onClick={() => handleDownload(thumb)}
                                             className="size-6 bg-black/50 p-1 rounded hover:bg-pink-600 transition-all"
                                         />
-                                        <ArrowUpRightIcon className="size-6 bg-black/50 p-1 rounded hover:bg-pink-600 transition-all" />
+                                        <Link
+                                            target="_blank"
+                                            to={`/preview?thumbnail_url=${thumb.image_url}&title=${thumb.title}`}
+                                        >
+                                            <ArrowUpRightIcon className="size-6 bg-black/50 p-1 rounded hover:bg-pink-600 transition-all" />
+                                        </Link>
                                     </div>
                                 </div>
                             );
