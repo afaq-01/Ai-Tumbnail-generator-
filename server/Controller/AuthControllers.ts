@@ -1,5 +1,6 @@
 import { Request, Response } from "express"
-import {User} from '../model/User.js'
+import { User } from '../model/User.js'
+import { error } from "node:console";
 // Controllar fro user registration
 
 export const registerUser = async (req: Request, res: Response) => {
@@ -44,19 +45,14 @@ export const registerUser = async (req: Request, res: Response) => {
 export const loginUser = async (req: Request, res: Response) => {
 
     try {
-        const { name, email, password } = req.body;
+        const { email, password } = req.body;
         //find user by email
         const user = await User.findOne({ email });
-        if (user) {
+        if (!user) {
             return res.status(400).json({ message: 'user already exists' })
         }
 
-        //Encrypt the password 
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt)
 
-        const newUser = new User({ name, email, password: password })
-        await newUser.save();
 
         //setting user data in session 
         req.session.isLoggedIn = true;
@@ -65,9 +61,9 @@ export const loginUser = async (req: Request, res: Response) => {
         return res.json({
             message: 'Account created successfully'
             user: {
-                _id: newUser._id,
-                name: newUser.name,
-                email: newUser.email
+                _id: user._id,
+                name: user.name,
+                email: user.email
             }
         })
 
@@ -77,4 +73,36 @@ export const loginUser = async (req: Request, res: Response) => {
 
     }
 
+}
+
+// Controllar For User logout
+
+export const logoutUser = async (req: Request, res: Response) => {
+    req.session.destroy((error: any) => {
+        if (error) {
+            console.log(error)
+            return res.status(500).json({ message: error.message })
+
+        }
+    })
+    return res.json({ message: 'Logout successfully' })
+}
+
+//controllar for user verify
+
+export const verifyUser = async (req: Request, res: Response) => {
+    try {
+        const { userId } = req.session
+        const user = await User.findById(userId).select('-password')
+
+        if (!user) {
+            return res.status(400).json({ message: 'Invalid user' })
+        }
+        return res.json({ user })
+
+    } catch (error: any) {
+        console.log(error)
+        res.status(500).json({ message: error.message })
+
+    }
 }
