@@ -1,13 +1,12 @@
 import express from 'express'
 import { loginUser, logoutUser, registerUser, verifyUser } from '../Controller/AuthControllers.js'
-import protect from '../middleware/auth.js'
+import protect from '../middleware/Autha.js'
 
+const AuthRouter = express.Router();
 
-const AuthRouter= express.Router();
-
-AuthRouter.post('/register',resgisterUser)
-AuthRouter.post('/login',loginUser)
-AuthRouter.get('/verify',protect,verifyUser)
-AuthRouter.post('/logout',protect,logoutUser)
+AuthRouter.post('/register', registerUser)
+AuthRouter.post('/login', loginUser)
+AuthRouter.get('/verify', protect, verifyUser)
+AuthRouter.post('/logout', protect, logoutUser)
 
 export default AuthRouter

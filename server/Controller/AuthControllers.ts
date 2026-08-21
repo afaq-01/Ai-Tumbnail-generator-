@@ -51,9 +51,6 @@ export const loginUser = async (req: Request, res: Response) => {
         if (!user) {
             return res.status(400).json({ message: 'user already exists' })
         }
-
-
-
         //setting user data in session 
         req.session.isLoggedIn = true;
         req.session.userId = newUser.id;
@@ -98,7 +95,7 @@ export const verifyUser = async (req: Request, res: Response) => {
         if (!user) {
             return res.status(400).json({ message: 'Invalid user' })
         }
-        return res.json({ user })
+        return res.json({user})
 
     } catch (error: any) {
         console.log(error)
