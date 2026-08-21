@@ -3,6 +3,8 @@ import express, { Request, Response } from "express";
 import cors from "cors";
 import session from "express-session";
 import Connectdb from "./Config/db.js";
+import MongoStore from 'connect-mongo'
+import AuthRouter from "./routes/AuthRoutes.js";
 
 // Extend express-session types
 declare module "express-session" {
@@ -37,6 +39,11 @@ app.use(
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
       httpOnly: true,
     },
+    store:MongoStore.create({
+        mongoUrl: process.env.MONGODB_URI  as String,
+        collectionName:'sessions'
+    })
+
   })
 );
 
@@ -47,6 +54,8 @@ await Connectdb();
 app.get("/", (req: Request, res: Response) => {
   res.send("Server is Live!");
 });
+
+app.use('/api/auth',AuthRouter)
 
 // Port
 const port = process.env.PORT || 3000;
